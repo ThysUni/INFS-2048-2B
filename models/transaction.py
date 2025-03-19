@@ -1,24 +1,24 @@
 from datetime import date
 
 class Transaction:
-    def __init__(self, transaction_id, transaction_date, description, amount):
-        self.transaction_id = transaction_id
-        self.transaction_date = transaction_date
-        self.description = description
-        self.amount = amount
+    def __init__(self, transaction_id: int, transaction_date: date, description: str, amount: float):
+        self._transaction_id = transaction_id
+        self._transaction_date = transaction_date
+        self._description = description
+        self._amount = amount
         self._label = ""
 
     def get_id(self):
-        return self.transaction_id
+        return self._transaction_id
 
     def get_date(self):
-        return self.transaction_date
+        return self._transaction_date
 
     def get_description(self):
-        return self.description
+        return self._description
 
     def get_amount(self):
-        return self.amount
+        return self._amount
 
     def set_label(self, label):
         self._label = label
