@@ -22,11 +22,5 @@ class CSVRuleAccess(IRuleAccess):
     def get_rule(self, pattern):
         return self._rules_cache.get(pattern)
 
-test_rule = CSVRuleAccess()
-test_rule.load_rules("../examples/patterns.csv")
-print(test_rule.get_rule("water"))
-print(test_rule.load_rules("../examples/patterns.csv"))
-
-
 
 

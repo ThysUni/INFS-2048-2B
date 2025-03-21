@@ -21,3 +21,14 @@ def test_get_rule():
 
     # Assert
     assert rule_access.get_rule("coffee") == "Food"
+    assert rule_access.get_rule("water") == "Utilities"
+
+    # Test case sensitivity
+    assert rule_access.get_rule("Coffee") is None
+
+    # Test a pattern that doesn't exist
+    assert rule_access.get_rule("does_not_exist") is None
+
+    # Test empty string
+    assert rule_access.get_rule("") is None
+
