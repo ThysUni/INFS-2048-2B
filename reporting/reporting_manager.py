@@ -24,14 +24,29 @@ class ReportingManager:
             next(reader)
             for row in reader:
                 if len(row) >= 3: # making sure we have all required fields
-                    transaction_date, description, amount = row[0], row[1], row[2]
-                    t = Transaction(
-                        None,
-                        date.fromisoformat(transaction_date),
-                        description,
-                        float(amount)
-                    )
-                    transactions.append(t)
+                    transaction_date_str, description, amount = row[0], row[1], row[2]
+
+                    # date format conversion
+                    if '/' in transaction_date_str:
+                        # assuming DD/MM/YYYY format
+                        day, month, year = transaction_date_str.split('/')
+                        # convert to YYYY-MM-DD
+                        transaction_date = f"{year}-{month}-{day}"
+
+                    try:
+                        transaction_date = date.fromisoformat(transaction_date_str)
+
+                        t = Transaction(
+                            None,
+                            transaction_date,
+                            description,
+                            float(amount)
+                        )
+                        transactions.append(t)
+                    except ValueError as e:
+                        print(f"Waring: could not parse date: '{transaction_date_str}': {e}. Skipping.")
+                        continue
+
         count = self._transaction_access.store_transactions(transactions)
         return count
 

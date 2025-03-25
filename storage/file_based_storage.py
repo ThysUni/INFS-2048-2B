@@ -21,19 +21,26 @@ class FileBasedStorage(ITransactionAccess):
         """
         Reads the JSON file and converts the data into Transaction objects
         """
-        with open(self._internal_storage, 'r') as json_file:
-            data = json.load(json_file)
+        try:
+            with open(self._internal_storage, 'r') as json_file:
+                data = json.load(json_file)
+                self._transactions = []
+                for t in data:
+                    transaction = Transaction(
+                        t["id"],
+                        date.fromisoformat(t["date"]),
+                        t["description"],
+                        t["amount"]
+                    )
+                    if "label" in t:
+                        transaction.set_label(t["label"])
+                    self._transactions.append(transaction)
+        except FileNotFoundError:
+            # File doesn't exist yet, start with empty list
             self._transactions = []
-            for t in data:
-                transaction = Transaction(
-                    t["id"],
-                    date.fromisoformat(t["date"]),
-                    t["description"],
-                    t["amount"]
-                )
-                if "label" in t:
-                    transaction.set_label(t["label"])
-                self._transactions.append(transaction)
+        except json.JSONDecodeError:
+            # File exists but isn't valid JSON, start with empty list
+            self._transactions = []
 
     def _save_transactions(self):
         """
